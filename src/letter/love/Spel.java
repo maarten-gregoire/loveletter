@@ -1,8 +1,13 @@
 package letter.love;
 
 public class Spel {
-    int totaalAantalSpelers;
-    int aantalComputers;
+    private int totaalAantalSpelers;
+    private int aantalComputers;
+
+    KaartenStapel kaartSpel;
+    KaartenStapel afneemStapel;
+    KaartenStapel aflegStapel;
+    KaartenStapel ongebruikteKaarten;
 
     public Spel (int totaalAantalSpelers, int aantalComputers) {
         if (totaalAantalSpelers < 2 || totaalAantalSpelers > 4) {
