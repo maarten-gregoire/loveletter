@@ -1,4 +1,4 @@
-package letter.love;
+package letter.love.kaart;
 
 public enum KaartType {
     WACHTER(1, 5),
