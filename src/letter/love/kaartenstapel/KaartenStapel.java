@@ -42,4 +42,24 @@ public class KaartenStapel {
         this.kaarten.clear();
         return kaarten;
     }
+
+    public boolean isLeeg() {
+        return kaarten.isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KaartenStapel that = (KaartenStapel) o;
+
+        return kaarten != null ? kaarten.equals(that.kaarten) : that.kaarten == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return kaarten != null ? kaarten.hashCode() : 0;
+    }
 }

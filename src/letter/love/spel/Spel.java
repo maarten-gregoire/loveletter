@@ -6,7 +6,9 @@ import letter.love.kaartenstapel.KaartenStapel;
 import letter.love.speler.Speler;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static letter.love.kaartenstapel.KaartSpel.eenKaartSpel;
 import static letter.love.kaartenstapel.KaartenStapel.eenKaartenStapel;
@@ -22,6 +24,11 @@ public class Spel {
     private Kaart onzichtbareOngebruikteKaart;
 
     private List<Speler> spelers;
+    private int actieveSpelerIndex;
+
+    private Speler winnaar;
+
+    private boolean spelBezig = false;
 
     public Spel(int totaalAantalSpelers, int aantalComputers) {
         startNieuwSpel(totaalAantalSpelers, aantalComputers);
@@ -33,6 +40,52 @@ public class Spel {
         initialiseerAantallen(totaalAantalSpelers, aantalComputers);
         initialiseerSpelers();
         initialiseerKaartStapels();
+        this.actieveSpelerIndex = -1;
+        spelBezig = true;
+
+    }
+
+    public void speelBeurt() {
+        actieveSpelerIndex++;
+        if (actieveSpelerIndex > spelers.size()-1) {
+            actieveSpelerIndex = 0;
+        }
+        Speler speler = this.spelers.get(actieveSpelerIndex);
+
+        //TODO: implement speel
+
+        if(spelTenEinde()) {
+            spelBezig = false;
+            winnaar = bepaalWinnaar();
+        }
+
+    }
+
+    private Speler bepaalWinnaar() {
+       if (eenLaatsteSpelerBlijftOver()) {
+           return spelers.stream().filter(speler -> !speler.heeftKaarten()).collect(Collectors.toList()).get(0);
+       }
+       return bepaalSpelerMetHoogsteKaart();
+
+        // TODO: bij 2 spelers met zelfde waarde telt de som van de afgelegde kaarten
+    }
+
+    private Speler bepaalSpelerMetHoogsteKaart() {
+        Comparator<Speler> comparator = Comparator.comparing(Speler::getKaartWaarde);
+        return spelers.stream().max(comparator).orElse(null);
+    }
+
+    private boolean spelTenEinde() {
+        return (eenLaatsteSpelerBlijftOver() || kaartenZijnOp());
+    }
+
+    private boolean eenLaatsteSpelerBlijftOver() {
+        return spelers.stream().filter(speler -> !speler.heeftKaarten()).count() == 1;
+    }
+
+    private boolean kaartenZijnOp() {
+
+        return afneemStapel.isLeeg();
     }
 
     private void initialiseerSpelers() {
@@ -93,4 +146,42 @@ public class Spel {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Spel spel = (Spel) o;
+
+        if (totaalAantalSpelers != spel.totaalAantalSpelers) return false;
+        if (aantalComputers != spel.aantalComputers) return false;
+        if (actieveSpelerIndex != spel.actieveSpelerIndex) return false;
+        if (spelBezig != spel.spelBezig) return false;
+        if (kaartSpel != null ? !kaartSpel.equals(spel.kaartSpel) : spel.kaartSpel != null) return false;
+        if (afneemStapel != null ? !afneemStapel.equals(spel.afneemStapel) : spel.afneemStapel != null) return false;
+        if (aflegStapel != null ? !aflegStapel.equals(spel.aflegStapel) : spel.aflegStapel != null) return false;
+        if (zichtbareOngebruikteKaarten != null ? !zichtbareOngebruikteKaarten.equals(spel.zichtbareOngebruikteKaarten) : spel.zichtbareOngebruikteKaarten != null)
+            return false;
+        if (onzichtbareOngebruikteKaart != null ? !onzichtbareOngebruikteKaart.equals(spel.onzichtbareOngebruikteKaart) : spel.onzichtbareOngebruikteKaart != null)
+            return false;
+        if (spelers != null ? !spelers.equals(spel.spelers) : spel.spelers != null) return false;
+        return winnaar != null ? winnaar.equals(spel.winnaar) : spel.winnaar == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = totaalAantalSpelers;
+        result = 31 * result + aantalComputers;
+        result = 31 * result + (kaartSpel != null ? kaartSpel.hashCode() : 0);
+        result = 31 * result + (afneemStapel != null ? afneemStapel.hashCode() : 0);
+        result = 31 * result + (aflegStapel != null ? aflegStapel.hashCode() : 0);
+        result = 31 * result + (zichtbareOngebruikteKaarten != null ? zichtbareOngebruikteKaarten.hashCode() : 0);
+        result = 31 * result + (onzichtbareOngebruikteKaart != null ? onzichtbareOngebruikteKaart.hashCode() : 0);
+        result = 31 * result + (spelers != null ? spelers.hashCode() : 0);
+        result = 31 * result + actieveSpelerIndex;
+        result = 31 * result + (winnaar != null ? winnaar.hashCode() : 0);
+        result = 31 * result + (spelBezig ? 1 : 0);
+        return result;
+    }
 }

@@ -4,6 +4,11 @@ import static letter.love.kaart.KaartType.KONING;
 
 public class Koning extends Kaart {
     public Koning() {
-        super(KONING, "Koning", 5);
+        super(KONING, "Koning", 5, "Ruil handen", 1);
+    }
+
+    @Override
+    void voerActieUit() {
+
     }
 }
