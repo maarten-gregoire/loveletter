@@ -1,13 +1,54 @@
 package letter.love;
 
+import com.sun.javafx.binding.StringFormatter;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import letter.love.spel.Spel;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 public class CommandLineApp {
 
-    Spel spel;
+    private Scanner scanner = new Scanner(System.in);
 
-    public CommandLineApp() {
-        spel = new Spel(4, 3);
+
+    CommandLineApp() {
+        do {
+            int aantalSpelers = vraagAantalSpelers();
+            int aantalComputers = vraagAantalComputers(aantalSpelers);
+            speelSpel(aantalSpelers, aantalComputers);
+        } while (vraagNogEenSpel());
+    }
+
+    private int vraagAantalComputers(int aantalSpelers) {
+        int aantalComputers;
+        do {
+            System.out.println(StringFormatter.format("Hoeveel van de spelers zijn computers? (maximum %s): ", aantalSpelers));
+            aantalComputers = scanner.nextInt();
+            if (aantalComputers > 4 || aantalComputers < 2 || aantalComputers > aantalSpelers) System.out.println("Minimum 2, maximum 4 spelers");
+        } while (aantalComputers > 4 || aantalComputers < 2 || aantalComputers > aantalSpelers);
+        return aantalComputers;
+    }
+
+    private int vraagAantalSpelers() {
+        int aantal;
+        do {
+            System.out.println("Voor hoeveel spelers is dit spel? (min 2, max 4): ");
+            aantal = scanner.nextInt();
+            if (aantal > 4 || aantal < 2) System.out.println("Minimum 2, maximum 4 spelers");
+        } while (aantal > 4 || aantal < 2);
+        return aantal;
+    }
+
+    private boolean vraagNogEenSpel() {
+        System.out.println("Wil je nog een spelletje spelen?: ");
+        String nogEenSpel = scanner.next();
+        return ("Y".equals(nogEenSpel) || "y".equals(nogEenSpel) || "j".equals(nogEenSpel) || "J".equals(nogEenSpel));
+    }
+
+    private void speelSpel(int aantalSpelers, int aantalComputers) {
+        Spel spel = new Spel(aantalSpelers, aantalComputers);
+
         spel.speelBeurt();
     }
 }
