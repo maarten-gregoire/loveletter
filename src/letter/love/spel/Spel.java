@@ -1,7 +1,6 @@
 package letter.love.spel;
 
 import letter.love.kaart.Kaart;
-import letter.love.kaartenstapel.KaartSpel;
 import letter.love.kaartenstapel.KaartenStapel;
 import letter.love.speler.Speler;
 
@@ -46,11 +45,7 @@ public class Spel {
     }
 
     public void speelBeurt() {
-        actieveSpelerIndex++;
-        if (actieveSpelerIndex > spelers.size()-1) {
-            actieveSpelerIndex = 0;
-        }
-        Speler speler = this.spelers.get(actieveSpelerIndex);
+        Speler speler = bepaalSpeler();
 
         //TODO: implement speel
 
@@ -58,16 +53,45 @@ public class Spel {
             spelBezig = false;
             winnaar = bepaalWinnaar();
         }
+    }
 
+    private Speler bepaalSpeler() {
+        actieveSpelerIndex++;
+        if (actieveSpelerIndex > spelers.size()-1) {
+            actieveSpelerIndex = 0;
+        }
+        return this.spelers.get(actieveSpelerIndex);
     }
 
     private Speler bepaalWinnaar() {
        if (eenLaatsteSpelerBlijftOver()) {
-           return spelers.stream().filter(speler -> !speler.heeftKaarten()).collect(Collectors.toList()).get(0);
+           return bepaalLaatsteSpeler();
        }
-       return bepaalSpelerMetHoogsteKaart();
 
-        // TODO: bij 2 spelers met zelfde waarde telt de som van de afgelegde kaarten
+       List<Speler> spelersMetHoogsteKaart = bepaalSpelersMetHoogsteKaart();
+        if (spelersMetHoogsteKaart.size() > 1) {
+            return spelersMetHoogsteKaart.get(0);
+        }
+        return bepaalSpelerMetHoogsteWaardeGespeeldeKaarten(spelersMetHoogsteKaart);
+    }
+
+    private Speler bepaalSpelerMetHoogsteWaardeGespeeldeKaarten(List<Speler> spelers) {
+        Comparator<Speler> comparator = Comparator.comparing(Speler::getTotaleWaardeGespeeldeKaarten);
+        return spelers.stream().max(comparator).orElse(null);
+    }
+
+    private List<Speler> bepaalSpelersMetHoogsteKaart() {
+        Kaart hoogsteKaart = bepaalHoogsteKaart();
+        return spelers.stream().filter(speler -> speler.getHuidigeKaart().equals(hoogsteKaart)).collect(Collectors.toList());
+    }
+
+    private Kaart bepaalHoogsteKaart() {
+        Comparator<Speler> comparator = Comparator.comparing(Speler::getKaartWaarde);
+        return spelers.stream().max(comparator).orElse(null).getHuidigeKaart();
+    }
+
+    private Speler bepaalLaatsteSpeler() {
+        return spelers.stream().filter(speler -> !speler.heeftKaarten()).collect(Collectors.toList()).get(0);
     }
 
     private Speler bepaalSpelerMetHoogsteKaart() {
@@ -166,7 +190,6 @@ public class Spel {
             return false;
         if (spelers != null ? !spelers.equals(spel.spelers) : spel.spelers != null) return false;
         return winnaar != null ? winnaar.equals(spel.winnaar) : spel.winnaar == null;
-
     }
 
     @Override

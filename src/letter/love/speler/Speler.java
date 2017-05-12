@@ -59,4 +59,12 @@ public class Speler {
         result = 31 * result + (naam != null ? naam.hashCode() : 0);
         return result;
     }
+
+    public Kaart getHuidigeKaart() {
+        return handkaarten.kaarten.get(0);
+    }
+
+    public Integer getTotaleWaardeGespeeldeKaarten() {
+        return aflegStapel.getKaarten().stream().mapToInt(Kaart::getWaarde).sum();
+    }
 }

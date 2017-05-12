@@ -55,11 +55,14 @@ public class KaartenStapel {
         KaartenStapel that = (KaartenStapel) o;
 
         return kaarten != null ? kaarten.equals(that.kaarten) : that.kaarten == null;
-
     }
 
     @Override
     public int hashCode() {
         return kaarten != null ? kaarten.hashCode() : 0;
+    }
+
+    public List<Kaart> getKaarten() {
+        return kaarten;
     }
 }
