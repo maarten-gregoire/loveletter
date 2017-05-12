@@ -2,6 +2,8 @@ package letter.love.spel;
 
 import letter.love.kaart.Kaart;
 import letter.love.kaartenstapel.KaartenStapel;
+import letter.love.speler.Computer;
+import letter.love.speler.Mens;
 import letter.love.speler.Speler;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class Spel {
 
     private List<Speler> spelers;
     private int actieveSpelerIndex;
+    private Speler actieveSpeler;
 
     private Speler winnaar;
 
@@ -45,15 +48,24 @@ public class Spel {
 
     }
 
-    public void speelBeurt() {
-        Speler speler = bepaalSpeler();
-
+    public void startBeurt() {
+        actieveSpeler = bepaalSpeler();
+        geefKaartVanAfneemStapelAanActieveSpeler();
         //TODO: implement speel
 
+
+    }
+
+    public Speler getActieveSpeler() {
+        return actieveSpeler;
+    }
+
+    public boolean isGameOver() {
         if(spelTenEinde()) {
             spelBezig = false;
             winnaar = bepaalWinnaar();
         }
+        return spelBezig;
     }
 
     private Speler bepaalSpeler() {
@@ -115,8 +127,11 @@ public class Spel {
 
     private void initialiseerSpelers() {
         this.spelers = new ArrayList<>();
-        for (int i = 0; i < totaalAantalSpelers; i++) {
-            this.spelers.add(new Speler());
+        for (int i = 0; i < aantalComputers; i++) {
+            this.spelers.add(new Computer());
+        }
+        for (int i = aantalComputers; i < totaalAantalSpelers; i++) {
+            this.spelers.add(new Mens());
         }
     }
 
@@ -172,41 +187,7 @@ public class Spel {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Spel spel = (Spel) o;
-
-        if (totaalAantalSpelers != spel.totaalAantalSpelers) return false;
-        if (aantalComputers != spel.aantalComputers) return false;
-        if (actieveSpelerIndex != spel.actieveSpelerIndex) return false;
-        if (spelBezig != spel.spelBezig) return false;
-        if (kaartSpel != null ? !kaartSpel.equals(spel.kaartSpel) : spel.kaartSpel != null) return false;
-        if (afneemStapel != null ? !afneemStapel.equals(spel.afneemStapel) : spel.afneemStapel != null) return false;
-        if (aflegStapel != null ? !aflegStapel.equals(spel.aflegStapel) : spel.aflegStapel != null) return false;
-        if (zichtbareOngebruikteKaarten != null ? !zichtbareOngebruikteKaarten.equals(spel.zichtbareOngebruikteKaarten) : spel.zichtbareOngebruikteKaarten != null)
-            return false;
-        if (onzichtbareOngebruikteKaart != null ? !onzichtbareOngebruikteKaart.equals(spel.onzichtbareOngebruikteKaart) : spel.onzichtbareOngebruikteKaart != null)
-            return false;
-        if (spelers != null ? !spelers.equals(spel.spelers) : spel.spelers != null) return false;
-        return winnaar != null ? winnaar.equals(spel.winnaar) : spel.winnaar == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = totaalAantalSpelers;
-        result = 31 * result + aantalComputers;
-        result = 31 * result + (kaartSpel != null ? kaartSpel.hashCode() : 0);
-        result = 31 * result + (afneemStapel != null ? afneemStapel.hashCode() : 0);
-        result = 31 * result + (aflegStapel != null ? aflegStapel.hashCode() : 0);
-        result = 31 * result + (zichtbareOngebruikteKaarten != null ? zichtbareOngebruikteKaarten.hashCode() : 0);
-        result = 31 * result + (onzichtbareOngebruikteKaart != null ? onzichtbareOngebruikteKaart.hashCode() : 0);
-        result = 31 * result + (spelers != null ? spelers.hashCode() : 0);
-        result = 31 * result + actieveSpelerIndex;
-        result = 31 * result + (winnaar != null ? winnaar.hashCode() : 0);
-        result = 31 * result + (spelBezig ? 1 : 0);
-        return result;
+    public void geefKaartVanAfneemStapelAanActieveSpeler() {
+        spelers.get(actieveSpelerIndex).geefKaart(afneemStapel.neemBovensteKaart());
     }
 }

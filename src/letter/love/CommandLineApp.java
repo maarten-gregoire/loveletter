@@ -1,10 +1,11 @@
 package letter.love;
 
 import com.sun.javafx.binding.StringFormatter;
-import com.sun.org.apache.xpath.internal.SourceTree;
+import letter.love.kaart.Kaart;
 import letter.love.spel.Spel;
+import letter.love.speler.Speler;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class CommandLineApp {
@@ -48,7 +49,14 @@ public class CommandLineApp {
 
     private void speelSpel(int aantalSpelers, int aantalComputers) {
         Spel spel = new Spel(aantalSpelers, aantalComputers);
+        do {
+            spel.startBeurt();
+            Kaart teSpelenKaart = bepaalTeSpelenKaart();
 
-        spel.speelBeurt();
+        } while (!spel.isGameOver());
+    }
+
+    private Kaart bepaalTeSpelenKaart() {
+        throw new NotImplementedException();
     }
 }
