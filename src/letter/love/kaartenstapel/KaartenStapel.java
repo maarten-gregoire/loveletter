@@ -38,9 +38,9 @@ public class KaartenStapel {
     }
 
     public List<Kaart> neemAlleKaarten() {
-        kaarten = this.kaarten;
+        List<Kaart> genomenkaarten = this.kaarten;
         this.kaarten.clear();
-        return kaarten;
+        return genomenkaarten;
     }
 
     public boolean isLeeg() {

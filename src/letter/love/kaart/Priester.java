@@ -1,5 +1,7 @@
 package letter.love.kaart;
 
+import letter.love.voeractieuit.VoerActieUit;
+
 import static letter.love.kaart.KaartType.PRIESTER;
 
 public class Priester extends Kaart {
@@ -7,8 +9,9 @@ public class Priester extends Kaart {
         super(PRIESTER, "Priester", 2, "Bekijk een hand", 2);
     }
 
+
     @Override
-    void voerActieUit() {
+    void voerActieUit(VoerActieUit voerActieUit) {
 
     }
 }

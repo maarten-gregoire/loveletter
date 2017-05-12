@@ -1,5 +1,7 @@
 package letter.love.kaart;
 
+import letter.love.voeractieuit.VoerActieUit;
+
 import static letter.love.kaart.KaartType.BARON;
 
 public class Baron extends Kaart {
@@ -8,7 +10,7 @@ public class Baron extends Kaart {
     }
 
     @Override
-    void voerActieUit() {
+    void voerActieUit(VoerActieUit voerActieUit) {
 
     }
 }

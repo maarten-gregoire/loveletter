@@ -1,5 +1,7 @@
 package letter.love.kaart;
 
+import letter.love.voeractieuit.VoerActieUit;
+
 public abstract class Kaart {
     int id;
     final KaartType type;
@@ -16,7 +18,7 @@ public abstract class Kaart {
         this.aantalInSpel = aantalInSpel;
     }
 
-    abstract void voerActieUit();
+    abstract void voerActieUit(VoerActieUit voerActieUit);
 
     public int getWaarde() {
         return waarde;
