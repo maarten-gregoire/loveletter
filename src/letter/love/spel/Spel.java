@@ -15,6 +15,7 @@ import static letter.love.kaartenstapel.KaartenStapel.eenKaartenStapel;
 public class Spel {
     private int totaalAantalSpelers;
     private int aantalComputers;
+    private int aantalMensen;
 
     private KaartenStapel kaartSpel;
     private KaartenStapel afneemStapel;
@@ -156,6 +157,7 @@ public class Spel {
     private void initialiseerAantallen(int totaalAantalSpelers, int aantalComputers) {
         this.totaalAantalSpelers = totaalAantalSpelers;
         this.aantalComputers = aantalComputers;
+        this.aantalMensen = totaalAantalSpelers - aantalComputers;
     }
 
     private void valideerAantalComputers(int totaalAantalSpelers, int aantalComputers) {
